@@ -1,0 +1,51 @@
+Question,Answer
+How do I install IQ-TREE on Windows?,Download the Windows binary from the IQ-TREE website. Extract the files and add the directory to your system's PATH. This will allow you to run IQ-TREE from any command prompt.
+How do I install IQ-TREE on Mac OS X?,"Use Homebrew by running the command `brew install iqtree`. Alternatively, download the Mac binary from the website, extract it, and add it to your PATH."
+How do I install IQ-TREE on Linux?,"Use your package manager, like `apt` for Ubuntu (`sudo apt install iqtree`) or `yum` for CentOS. You can also download the Linux binary and move it to `/usr/local/bin` for system-wide access."
+What are the system requirements for running IQ-TREE?,"A modern multi-core CPU, at least 4GB of RAM (more for large datasets), and an operating system like Windows, Mac OS X, or Linux."
+How can I use the IQ-TREE web server?,"Visit the IQ-TREE web server interface. Upload your alignment file, select the desired options for analysis, and submit your job. Results will be provided online."
+How do I choose the right substitution model?,Use ModelFinder integrated in IQ-TREE by adding `-m MFP` to your command. IQ-TREE will evaluate various models and select the best one based on statistical criteria like BIC.
+What is the ultrafast bootstrap approximation?,A method for quickly assessing branch support in phylogenetic trees. It provides reliable support values faster than traditional bootstrap methods.
+How do I interpret ultrafast bootstrap support values?,"Values above 95% indicate strong support, while values below 85% suggest weak support for a branch."
+Can IQ-TREE handle large datasets?,"Yes, IQ-TREE is optimized for large datasets, using efficient algorithms and parallel computing to manage data efficiently."
+What types of data can IQ-TREE analyze?,"DNA, RNA, protein, codon, binary, and morphological data, with support for mixed data types in partitioned analyses."
+How do I perform a partitioned analysis?,Create a partition file specifying models for each data block. Run IQ-TREE with the `-spp` option followed by your partition file name.
+How do I specify a partition file?,"A partition file lists partitions and models, e.g., `DNA, gene1 = 1-100; DNA, gene2 = 101-200`. Use the `-spp partition_file.txt` option."
+Can I mix DNA and protein data in a partitioned analysis?,"Yes, specify different models for each partition in the partition file."
+How does IQ-TREE treat gap/missing/ambiguous characters?,"These characters are treated as missing data and are ignored in calculations, ensuring they don't affect likelihood estimates."
+What are the different phylogenetic models available in IQ-TREE?,"Includes models for DNA (e.g., GTR, HKY), protein (e.g., JTT, WAG), codon, binary, and morphological data."
+How do I perform model selection in IQ-TREE?,Use the command `iqtree2 -s alignment.phy -m MFP`. IQ-TREE will automatically select the best-fit model.
+How to run a basic tree inference using IQ-TREE?,"Execute `iqtree2 -s your_data.phy`, where `your_data.phy` is your alignment file. This will infer a tree using default settings."
+How do I assess branch supports using nonparametric bootstrap?,"Use the `-b` option followed by the number of bootstrap replicates, e.g., `iqtree2 -s your_data.phy -b 1000`."
+How does IQ-TREE compare to other phylogenetic software?,"IQ-TREE offers high accuracy and speed, often outperforming others due to its efficient algorithms and parallel computing capabilities."
+"What is the SH-aLRT test, and how is it used?",A likelihood ratio test for branch support. Use it with `-alrt 1000` for 1000 replicates. It provides additional support metrics alongside bootstrap values.
+How do I report a bug in IQ-TREE?,Contact the development team via the contact form on the IQ-TREE website or report issues on their GitHub page.
+How do I cite IQ-TREE in my research?,"Use the citation format provided on the IQ-TREE website, typically referencing the main IQ-TREE paper by Minh et al."
+What are the benefits of using the IQ-TREE web server?,"It provides a user-friendly interface, eliminating the need for command-line expertise. It also handles computational tasks on remote servers."
+How can I speed up my analysis using multicore CPUs?,"Use the `-nt` option to specify the number of threads, e.g., `-nt 4` to use four CPU cores."
+How do I constrain a tree search in IQ-TREE?,Use a constraint file with the `-g` option to enforce constraints on tree topology during the search.
+What is the approximately unbiased (AU) test?,A statistical test to compare tree topologies. Use the `-au` option to perform this test when evaluating multiple trees.
+How can I perform ancestral sequence reconstruction?,Add the `-asr` option to your command to perform ancestral state reconstruction on your phylogenetic tree.
+How does IQ-TREE treat identical sequences?,"Identical sequences are merged to save computation time, with results adjusted to account for the merging."
+What is the purpose of the composition test?,"To check if the nucleotide or amino acid composition is homogeneous across the dataset, helping identify potential biases."
+How do I save time with standard bootstrap analysis?,"Use ultrafast bootstrap `-bb` instead, which provides faster and reliable branch support values."
+What is the best number of CPU cores to use?,"Use as many cores as your system allows, balancing with other system demands. More cores generally reduce computation time."
+Why does IQ-TREE complain about the use of +ASC model?,Ensure your data is appropriate for ascertainment bias correction and that the +ASC model is suitable for your analysis.
+How do I simulate sequence alignments in IQ-TREE?,"Use AliSim, a tool included with IQ-TREE, to simulate alignments based on specified models and trees."
+What are polymorphism-aware models in IQ-TREE?,"Models that account for within-population genetic variation, useful for datasets with population-level data."
+How can I perform tree topology tests?,Use `-zb` and `-au` options to compare and test different tree topologies for statistical support.
+"What is the concordance factor, and how is it calculated?","Measures the proportion of gene trees or sites supporting a branch in the species tree, calculated using specific IQ-TREE options like `-t`."
+How do I root a phylogenetic tree using IQ-TREE?,"Specify an outgroup with the `-o` option, or use rooting methods like midpoint rooting after tree inference."
+How do I simulate along a random tree?,Use AliSim with a randomly generated tree input to simulate sequence evolution along the tree.
+What is a mixture model in IQ-TREE?,"Models that allow different sites to follow different evolutionary processes, useful for analyzing complex datasets with varying rates and patterns."
+How do I compile IQ-TREE from source code?,"Clone the IQ-TREE repository from GitHub, then use `cmake` and `make` commands to compile the software according to the instructions."
+How do I customize output alignments?,"Use options in AliSim to control the format, content, and characteristics of simulated sequence alignments."
+Can IQ-TREE handle non-reversible models?,"Yes, IQ-TREE supports non-reversible models through specific options, allowing more complex evolutionary hypotheses."
+How do I perform likelihood mapping analysis?,"Use the `-lm` option to visualize the phylogenetic signal in your data, helping to identify conflicting signals or unresolved nodes."
+How do I specify user-defined substitution models?,Define custom models in a text file and use the `-mset` option to apply them during analysis.
+How do I test root positions in a phylogenetic tree?,Use specific tests in IQ-TREE designed to evaluate and compare alternative root positions statistically.
+What are site-specific frequency models?,"Models that allow each site to have its own base or amino acid frequencies, useful for datasets with varying site patterns."
+How do I use IQ-TREE for pathogen data?,"IQ-TREE includes optimized options for analyzing large pathogen datasets, providing rapid insights into outbreak data."
+How do I calculate Robinson-Foulds distance?,Use the `-rf` option to measure the topological distance between two phylogenetic trees.
+How do I generate random trees in IQ-TREE?,"Use the `-rand` option to create random trees, useful for simulations or testing analysis parameters."
+Where can I find more tutorials and documentation on IQ-TREE?,Visit the IQ-TREE website and explore the tutorials and manuals section for detailed guides and examples.

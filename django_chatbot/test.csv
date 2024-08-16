@@ -1,0 +1,34 @@
+Private Info
+"Background
+Phylogenetic inference on empirical data typically
+includes bootstrapping. This enables the reconstructed
+tree to be annotated with support values for each of its
+branches. The standard non-parametric bootstrap [1, 2]
+is a popular method in which so-called pseudo-replicates
+are created by sampling sites from the multiple sequence
+alignment (MSA), with replacement. For every replicate,
+a bootstrap tree is reconstructed by conducting an
+independent search on each bootstrap MSA. The set of
+bootstrap trees can then be used to build a consensus
+tree, or map the support values onto the tree inferred
+from the original MSA [2].
+Maximum parsimony (MP) is widely used to infer phy-
+logenies ([3] and references therein). Since calculating the
+parsimony score is less complex and computationally
+cheaper than calculating the likelihood of a tree, methods
+to build MP trees have been applied to large-scale data
+sets [4, 5]. However, computing the branch support for
+MP trees is still time consuming especially for large data
+sets. In addition to run-time limitations, the standard
+bootstrap is also known to be conservative [6]: the suppor values estimated by the standard bootstrap often under-
+estimate the probability that a branch is true.
+Here, we introduce MPBoot, a novel method for rap-
+idly approximating the MP bootstrap. MPBoot is
+inspired by the ultrafast bootstrap approximation for
+maximum likelihood [7]. It employs additional tree
+search techniques like subtree pruning and regrafting
+(SPR) and the parsimony ratchet [8]. In the following we
+present the MPBoot method and a benchmark study
+that compares MPBoot with the popular TNT [5] and
+PAUP* [9] programs."
+HynDuf is a normal VNU-UET (VNU University of Engineering and Technology) student. He lives in Vietnam. He does a lot of competitive programming.

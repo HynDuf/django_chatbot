@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #343a40;
+    color: white;
+  }
+  .logout-btn {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .talks-box {
+    width: 250px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    padding: 10px;
+  }
+  .talk-list {
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+  }
+  .talk-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+  }
+  .talk-item.active {
+    background-color: #007bff;
+    color: white;
+  }
+  .new-talk {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  .messages-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  .message-form {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 250px;
+    right: 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+  }
+  .message-input {
+    flex: 1;
+    border-radius: 0;
+    border-right: none;
+  }
+  .btn-send {
+    border-radius: 0;
+  }
+  .chat-container {
+    height: 100%;
+    display: flex;
+  }
+  .messages-list {
+    padding: 0;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .message {
+    margin-bottom: 10px;
+    max-width: 60%;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    word-wrap: break-word;
+    display: inline-block;
+  }
+  .sent {
+    background-color: #e1ffc7;
+    margin-left: auto;
+    text-align: right;
+    float: right;
+  }
+  .received {
+    background-color: #f1f0f0;
+    margin-right: auto;
+    text-align: left;
+    float: left;
+  }
+  .message-text {
+    margin: 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="header">
+  <div>Welcome, {{ user.username }}</div>
+  <form action="{% url 'logout' %}" method="post" style="display: inline;">
+    {% csrf_token %}
+    <button type="submit" class="logout-btn">Logout</button>
+  </form>
+</div>
+
+<div class="chat-container">
+  <div class="talks-box">
+    <div class="new-talk">
+      <a href="{% url 'chatbot' %}" style="color: white; text-decoration: none;">+ New Talk</a>
+    </div>
+    <ul class="talk-list" id="talks-list">
+      {% for talk in talks %}
+        <li class="talk-item {% if talk == selected_talk %}active{% endif %}">
+          <a href="{% url 'chatbot' talk.id %}" style="text-decoration: none; color: inherit;">{{ talk.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="messages-box">
+    {% if chats %}
+      <ul class="list-unstyled messages-list">
+        {% for chat in chats %}
+          <li class="message sent">
+            <div class="message-text">
+              <b>You:</b> {{ chat.message }}
+            </div>
+          </li>
+          <li class="message received">
+            <div class="message-text">
+              <b>AI Chatbot:</b> {{ chat.response }}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty-chat">
+        <p>No messages yet. Start the conversation!</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <form class="message-form" method="POST">
+    {% csrf_token %}
+    <div class="input-group">
+      <input type="text" class="form-control message-input" placeholder="Type your message...">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-primary btn-send">Send</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  const messagesBox = document.querySelector('.messages-box');
+  messagesBox.scrollTop = messagesBox.scrollHeight;
+
+  let messagesList = document.querySelector('.messages-list');
+  const messageForm = document.querySelector('.message-form');
+  const messageInput = document.querySelector('.message-input');
+
+  messageForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const message = messageInput.value.trim();
+    if (message.length === 0) {
+      return;
+    }
+
+    if (!messagesList) {
+      const messagesBox = document.querySelector('.messages-box');
+      if (messagesBox) {
+        let newMessagesList = document.createElement('ul');
+        newMessagesList.classList.add('list-unstyled', 'messages-list');
+        messagesBox.appendChild(newMessagesList);
+        messagesList = newMessagesList;
+      } else {
+        console.error('Messages box not found');
+        return;
+      }
+    }
+
+    const messageItem = document.createElement('li');
+    messageItem.classList.add('message', 'sent');
+    messageItem.innerHTML = `<div class="message-text"><b>You:</b> ${message}</div>`;
+    messagesList.appendChild(messageItem);
+
+    messageInput.value = '';
+
+    fetch('', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        'csrfmiddlewaretoken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'message': message
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      const response = data.response;
+      const messageItem = document.createElement('li');
+      messageItem.classList.add('message', 'received');
+      messageItem.innerHTML = `
+        <div class="message-text">
+          <b>AI Chatbot:</b> ${response}
+        </div>`;
+      messagesList.appendChild(messageItem);
+
+      updateTalksList(data.talks);
+    });
+  });
+
+  function updateTalksList(talks) {
+    const talksList = document.getElementById('talks-list');
+    talksList.innerHTML = '';
+    talks.forEach(talk => {
+      const talkItem = document.createElement('li');
+      talkItem.classList.add('talk-item');
+      talkItem.innerHTML = `<a href="{% url 'chatbot' %}${talk.id}" style="text-decoration: none; color: inherit;">${talk.title}</a>`;
+      talksList.appendChild(talkItem);
+    });
+  }
+</script>
+{% endblock %}
